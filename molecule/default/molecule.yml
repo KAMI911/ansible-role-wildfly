@@ -99,11 +99,11 @@ provisioner:
         wildfly_mode: 'domain'
         wildfly_role: 'domain-master-slave'
       centos6:
-        tomcat_manage_firewalld: false
+        wildfly_manage_firewalld: false
       centos7:
-        tomcat_manage_firewalld: true
+        wildfly_manage_firewalld: true
       centos8:
-        tomcat_manage_firewalld: true
+        wildfly_manage_firewalld: true
       python3:
         ansible_python_interpreter: '/usr/bin/env python3'
 scenario:
