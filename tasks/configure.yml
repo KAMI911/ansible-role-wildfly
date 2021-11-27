@@ -399,7 +399,7 @@
       group: '{{ wildfly_group }}'
       mode: '0755'
     notify:
-      - restart wildfly domain services
+      - restart wildfly services
       - change data mode
     when: not wildfly_system_integration
 
@@ -490,7 +490,7 @@
       systemd:
         daemon_reload: true
       when:
-        - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 7) or ansible_os_family != 'RedHat')
+        - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 7) or ansible_os_family != 'RedHat')
   when:
     - ansible_service_mgr == 'systemd'
     - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int > 6) or ansible_os_family != 'RedHat')
@@ -517,7 +517,7 @@
       group: '{{ wildfly_group }}'
       mode: 0644
     notify:
-      - restart wildfly services
+      - restart wildfly domain services
       - change data mode
     when: not wildfly_system_integration
 
@@ -533,7 +533,7 @@
   - name: systemd reload
     systemd:
       daemon_reload: true
-    when: ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 7) or ansible_os_family != 'RedHat')
+    when: ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 7) or ansible_os_family != 'RedHat')
   when:
     - wildfly_mode == 'domain'
     - wildfly_role in [ 'domain-master', 'domain-master-slave' ]
@@ -548,9 +548,26 @@
     group: '{{ wildfly_group }}'
     mode: 0750
   notify:
+      - restart wildfly domain services
+      - change data mode
+  when:
+    - wildfly_mode == 'domain'
+    - wildfly_role in [ 'domain-master', 'domain-master-slave' ]
+    - ansible_service_mgr == 'systemd'
+    - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int > 6) or ansible_os_family != 'RedHat')
+
+- name: copy wildfly systemd start script file
+  template:
+    src: launch.sh.j2
+    dest: '{{ wildfly_base }}/bin/launch.sh'
+    owner: '{{ wildfly_user }}'
+    group: '{{ wildfly_group }}'
+    mode: 0750
+  notify:
       - restart wildfly services
       - change data mode
   when:
+    - wildfly_role not in [ 'domain-master', 'domain-master-slave' ]
     - ansible_service_mgr == 'systemd'
     - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int > 6) or ansible_os_family != 'RedHat')
 

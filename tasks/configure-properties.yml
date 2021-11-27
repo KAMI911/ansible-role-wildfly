@@ -7,6 +7,9 @@
     owner: '{{ wildfly_user }}'
     group: '{{ wildfly_group }}'
     mode: '0750'
+  notify:
+    - restart wildfly domain services
+    - change data mode
   when: wildfly_role == 'domain-master' or wildfly_role == 'domain-master-slave'
 
 - name: create wildfly domain server properties directory
