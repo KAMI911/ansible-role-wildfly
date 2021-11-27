@@ -8,9 +8,9 @@
       wait_for:
         path: '{{ wildfly_console_log }}'
         search_regex: 'started in'
-        timeout: 600
         delay: 10
         sleep: 3
+        timeout: 300
       ignore_errors: true
     - name: cat file
       command: '{{ wildfly_console_log }}'
@@ -28,9 +28,9 @@
       wait_for:
         path: '{{ wildfly_console_dc_log }}'
         search_regex: 'started in'
-        timeout: 600
         delay: 10
         sleep: 3
+        timeout: 300
       ignore_errors: true
       changed_when: false
     - name: cat file
@@ -52,9 +52,9 @@
       wait_for:
         path: '{{ wildfly_console_log }}'
         search_regex: 'started in'
-        timeout: 600
         delay: 10
         sleep: 3
+        timeout: 300
       ignore_errors: true
       changed_when: false
     - name: cat file

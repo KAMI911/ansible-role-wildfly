@@ -6,9 +6,9 @@
     wait_for:
       path: '{{ wildfly_console_log }}'
       search_regex: 'Connected to master host controller at'
-      timeout: 600
       delay: 10
       sleep: 3
+      timeout: 300
     ignore_errors: true
     changed_when: false
   - name: cat file
@@ -20,9 +20,13 @@
     - wildfly_mode == 'domain'
     - wildfly_role in [ 'domain-master-slave', 'domain-slave' ]
 
-- name: sleep for 30 seconds and continue with play
+- name: 'waiting for Wildfly to become available'
   wait_for:
-    timeout: 30
+    host: '{{ wildfly_master_address }}'
+    port: '{{ wildfly_master_http_port }}'
+    delay: 10
+    sleep: 3
+    timeout: 300
 
 - name: process JBoss Vault command for standalone
   jbosscli:
@@ -32,6 +36,8 @@
     password: '{{ wildfly_management_users.0.password }}'
     verbose: True
     command: 'if (outcome == success) of {{ wildfly_vault_command }},end-if'
+  delay: 10
+  retries: 30
   when:
     - wildfly_mode == 'standalone'
 
@@ -43,6 +49,8 @@
     password: '{{ wildfly_management_users.0.password }}'
     verbose: True
     command: 'if (outcome == success) of /host={{ ansible_hostname }}{{ wildfly_vault_command }},end-if'
+  delay: 10
+  retries: 30
   when:
     - wildfly_mode == 'domain'
     - wildfly_role in [ 'domain-master-slave', 'domain-slave' ]
