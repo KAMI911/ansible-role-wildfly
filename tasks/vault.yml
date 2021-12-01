@@ -50,3 +50,5 @@
 
   - debug:
       var: wildfly_vault_command
+  tags:
+   - wildfly_vault_generation
