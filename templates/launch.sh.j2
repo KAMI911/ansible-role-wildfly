@@ -12,6 +12,7 @@ if [[ "$1" == "domain" ]]; then
 {% else %}
       . '{{ wildfly_base }}/domain-controller/configuration/{{ wildfly_dc_instance_name }}.conf'
 {% endif %}
+      ${WILDFLY_HOME}/bin/domain.sh -c ${JBOSS_DOMAIN_CONFIG} --host-config=${JBOSS_HOST_CONFIG} -b 0.0.0.0 ${JBOSS_OPTS} -DCurrentDate=$(date +%Y-%m-%d_%H%M)
     ;;
       "node")
 {% if wildfly_system_integration %}
@@ -19,13 +20,13 @@ if [[ "$1" == "domain" ]]; then
 {% else %}
       . '{{ wildfly_base }}/domain/configuration/{{ wildfly_instance_name }}.conf'
 {% endif %}
+      ${WILDFLY_HOME}/bin/domain.sh -c ${JBOSS_DOMAIN_CONFIG} --host-config=${JBOSS_HOST_CONFIG} -b 0.0.0.0 ${JBOSS_OPTS} -DCurrentDate=$(date +%Y-%m-%d_%H%M) {% if wildfly_dc_backup_mode is defined and wildfly_dc_backup_mode == true %} --backup{% endif %}{% if wildfly_dc_cached_mode is defined and wildfly_dc_cached_mode == true %} --cached-dc{% endif %}
     ;;
       *)
       echo "Wrong doamin paramaters"
       exit -2
     ;;
     esac
-    ${WILDFLY_HOME}/bin/domain.sh -c ${JBOSS_DOMAIN_CONFIG} --host-config=${JBOSS_HOST_CONFIG} -b 0.0.0.0 ${JBOSS_OPTS} -DCurrentDate=$(date +%Y-%m-%d_%H%M)
 else
     $WILDFLY_HOME/bin/standalone.sh -c $2 -b $3 -DCurrentDate=$(date +%Y-%m-%d_%H%M)
 fi
