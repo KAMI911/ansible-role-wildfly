@@ -21,6 +21,8 @@
     args:
         creates: "{{ wildfly_vault_file }}"
     no_log: false
+    tags:
+     - wildfly_vault_secret
 
   - name: create Wildfly Vault secrets
     become: true
@@ -32,21 +34,33 @@
     with_items: '{{ wildfly_vault }}'
     no_log: false
     register: wildfly_vault_secret
+    tags:
+     - wildfly_vault_secret
 
   - debug:
       msg: "{{ wildfly_vault_secret }}"
+    tags:
+     - wildfly_vault_secret
 
   - debug:
       msg: '{{ item.stdout }}'
     with_items: '{{ wildfly_vault_secret.results }}'
+    tags:
+     - wildfly_vault_secret
 
   - debug:
       msg: '{{ item.stdout | regex_search("\/core-service.*\)\]\)", multiline=False, ignorecase=True) }}'
     with_items: '{{ wildfly_vault_secret.results }}'
+    tags:
+     - wildfly_vault_secret
 
   - set_fact:
       wildfly_vault_command: '{{ item.stdout | regex_search("\/core-service.*\)\]\)", multiline=False, ignorecase=True) }}'
     loop: '{{ wildfly_vault_secret.results }}'
+    tags:
+     - wildfly_vault_secret
 
   - debug:
       var: wildfly_vault_command
+    tags:
+     - wildfly_vault_secret

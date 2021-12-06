@@ -32,6 +32,8 @@
 
 - include_tasks: vault.yml
   when: wildfly_vault_enable
+  tags:
+   - wildfly_vault_secret
 
 - name: manage firewalld
   include_tasks: manage-firewalld.yml
