@@ -5,7 +5,7 @@ wildfly_major_v: '{{ wildfly_version.partition(".")[0] }}'
 
 wildfly_name: wildfly-{{ wildfly_version }}
 
-wildfly_dir: '{{ wildfly_install_dir }}/{{ wildfly_instance_name }}/{{ wildfly_name }}'
+wildfly_dir: '{{ wildfly_system_home }}/{{ wildfly_name }}'
 wildfly_link_dir: '{{ wildfly_install_dir }}/wildfly/{{ wildfly_instance_name }}'
 wildfly_config_path: '{{ wildfly_home }}/{{ wildfly_mode }}/configuration/{{ wildfly_config_file }}'
 wildfly_config_path_from: '{{ wildfly_dir }}/{{ wildfly_mode }}/configuration/{{ wildfly_config_file }}'

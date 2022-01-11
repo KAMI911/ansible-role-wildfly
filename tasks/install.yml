@@ -12,7 +12,7 @@
 - name: 'unarchive downloaded {{ wildfly_download_file }} file'
   unarchive:
     src: '{{ wildfly_download_dir }}/{{ wildfly_download_file }}'
-    dest: '{{ wildfly_install_dir }}/{{ wildfly_instance_name }}'
+    dest: '{{ wildfly_system_home }}'
     owner: '{{ wildfly_user }}'
     group: '{{ wildfly_group }}'
     # mode: '{{ wildfly_dir_mode }}'
