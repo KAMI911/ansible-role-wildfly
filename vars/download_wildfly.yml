@@ -2,7 +2,9 @@
 # Include wildfly vars
 
 __app_system_user: '{{ wildfly_user }}'
+__app_system_user_id: '{{ wildfly_user_id }}'
 __app_system_group: '{{ wildfly_group }}'
+__app_system_group_id: '{{ wildfly_group_id }}'
 __app_installer_force_overwrite: '{{ wildfly_installer_force_overwrite }}'
 __app_dir_mode: '{{ wildfly_dir_mode }}'
 __app_manage_user: '{{ wildfly_manage_user }}'

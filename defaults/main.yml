@@ -38,8 +38,10 @@ wildfly_version: '24.0.1.Final'  # supported versions: 9.0.2.Final; 10.0.0.Final
 wildfly_file_version: '17.0'  # 14 = 8.0; 15-18 = 10.0; 20 = 13.0; 24 = 17.0
 wildfly_manage_user: true
 wildfly_user: wildfly
+wildfly_user_id: 363
 wildfly_user_shell: ''
 wildfly_group: wildfly
+wildfly_group_id: 363
 
 wildfly_base_download_url: https://download.jboss.org/wildfly
 wildfly_download_validate_certs: 'yes'

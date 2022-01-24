@@ -10,6 +10,7 @@
       group:
         name: '{{ __app_system_group }}'
         system: true
+        gid:  '{{ __app_system_group_id | default(omit) }}'
         state: present
 
     - name: create application user
@@ -19,6 +20,7 @@
         createhome: '{% if wildfly_data | length > 0  %}true{% else %}false{% endif %}'
         home: '{% if wildfly_data | length > 0  %}{{ wildfly_data }}{% else %}{{ omit }}{% endif %}'
         shell: '{% if wildfly_user_shell | length > 0  %}{{ wildfly_user_shell }}{% else %}{{ omit }}{% endif %}'
+        uid:  '{{ __app_system_user_id | default(omit) }}'
         state: present
         system: true
   when: __app_manage_user
