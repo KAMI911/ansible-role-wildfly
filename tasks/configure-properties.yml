@@ -48,3 +48,19 @@
   when:
     - wildfly_mode == 'domain'
     - wildfly_role in [ 'domain-master', 'domain-master-slave' ]
+
+- name: 'create additional wildfly configuration in: {{ wildfly_base }}/domain/configuration/properties'
+  copy:
+    src: '{{ item }}'
+    dest: '{{ wildfly_base }}/domain/configuration//properties/{{ item }}'
+    owner: '{{ wildfly_user }}'
+    group: '{{ wildfly_group }}'
+    mode: '0640'
+    force: false
+  with_items:
+    - wildfly_defaults.properties
+  notify:
+    - restart wildfly services
+  when:
+    - wildfly_mode == 'domain'
+    - wildfly_role in [ 'domain-slave', 'domain-master-slave' ]

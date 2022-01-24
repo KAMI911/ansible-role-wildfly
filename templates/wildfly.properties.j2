@@ -11,7 +11,15 @@ jboss.bind.address.private={{ wildfly_bind_address_private }}
 jboss.http.port={{ wildfly_http_port }}
 jboss.https.port={{ wildfly_https_port }}
 
-jboss.server.temp.dir={{ wildfly_download_dir }}
+{% if wildfly_directory_grouping_data is defined and wildfly_directory_grouping_data %}
+jboss.domain.data.dir={{ wildfly_directory_grouping_data }}
+{% endif %}
+{% if wildfly_directory_grouping_log is defined and wildfly_directory_grouping_log %}
+jboss.domain.log.dir={{ wildfly_directory_grouping_log }}
+{% endif %}
+{% if wildfly_directory_grouping_tmp is defined and wildfly_directory_grouping_tmp %}
+jboss.domain.tmp.dir={{ wildfly_directory_grouping_tmp }}
+{% endif %}
 
 jboss.domain.master.address={{ wildfly_master_address }}
 jboss.domain.master.port={{ wildfly_master_http_port }}

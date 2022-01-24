@@ -26,7 +26,7 @@
     owner: '{{ wildfly_user }}'
     group: '{{ wildfly_group }}'
     mode: '{{ wildfly_dir_mode }}'
-    recurse: false
+    recurse: no
     state: directory
 
 - name: 'create domain configuration directory in: {{ wildfly_base }}'

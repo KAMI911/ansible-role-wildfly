@@ -29,7 +29,7 @@
     owner: '{{ __app_system_user }}'
     group: '{{ __app_system_group }}'
     mode: '{{ __app_dir_mode }}'
-    recurse: true
+    recurse: no
     state: directory
   when: (not __app_installed.stat.exists or __app_force_update)
 
@@ -51,7 +51,7 @@
     owner: '{{ __app_system_user }}'
     group: '{{ __app_system_group }}'
     mode: '{{ __app_dir_mode }}'
-    recurse: true
+    recurse: no
     state: directory
   when: (not __app_installed.stat.exists or __app_installer_force_overwrite or not __app_is_download_file.stat.exists)
 
