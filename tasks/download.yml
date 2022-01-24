@@ -17,8 +17,8 @@
       user:
         name: '{{ __app_system_user }}'
         group: '{{ __app_system_group }}'
-        createhome: '{% if wildfly_data | length > 0  %}true{% else %}false{% endif %}'
-        home: '{% if wildfly_data | length > 0  %}{{ wildfly_data }}{% else %}{{ omit }}{% endif %}'
+        createhome: '{% if __app_data | length > 0  %}true{% else %}false{% endif %}'
+        home: '{% if __app_data | length > 0  %}{{ __app_data }}{% else %}{{ __app_dir }}{% endif %}'
         shell: '{% if wildfly_user_shell | length > 0  %}{{ wildfly_user_shell }}{% else %}{{ omit }}{% endif %}'
         uid:  '{{ __app_system_user_id | default(omit) }}'
         state: present
