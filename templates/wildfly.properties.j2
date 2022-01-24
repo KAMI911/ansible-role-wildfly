@@ -34,6 +34,3 @@ jboss.modcluster.multicast.address={{ wildfly_modcluster_address }}
 jboss.default.multicast.address={{ wildfly_multicast_address }}
 {% endif %}
 jboss.domain.base.dir={{ wildfly_link_dir if wildfly_create_symlink else wildfly_dir }}/{{ wildfly_mode }}
-{% if wildfly_data != '' %}
-jboss.server.data.dir={{ wildfly_data }}
-{% endif %}
