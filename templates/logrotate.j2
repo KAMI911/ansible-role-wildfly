@@ -11,15 +11,15 @@
 {
   su {{ wildfly_user }} {{ wildfly_group }}
   daily
+  dateyesterday
   rotate 730
   copytruncate
   compress
-  delaycompress
   missingok
   notifempty
   dateext
   dateformat -%Y%m%d
-  minsize {{ wildfly_log_rotate_minsize }}
+  minsize {{ wildfly_log_rotate_minsize | default('20k') }}
   compresscmd {{ wildfly_log_compress_command }}
   compressoptions "{{ wildfly_log_compress_options }}"
   compressext {{ wildfly_log_compress_extension }}
