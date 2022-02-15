@@ -2,7 +2,8 @@
 MAILTO=root
 
 {% if wildfly_role == 'domain-slave' or wildfly_role == 'domain-master-slave' %}
-10 2 * * * {{ wildfly_user }} find {{ wildfly_base }}/domain/servers/*/log/ ! \( -name '*.xz' -o -name '*.gz' \) -mtime +2 -type f -exec xz -T6 -9ev {} \;
+10 2 * * * {{ wildfly_user }} nice -n 10 find {{ wildfly_base }}/servers/*/log/ \( -name \*????-??-??.log -or -name \*log.????-??-?? \) ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r /usr/bin/xz -3 -T0
+50 2 * * * {{ wildfly_user }} nice -n 10 find {{ wildfly_base }}/gc/ \( -name gc[_-]\*.log -or -name gc[_-]\*.log.\? -or -name gc[_-]\*.log.\?? -or -name gc[_-]\*.log.\??? \) ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +2 -type f -print0 | xargs -0 -t -r /usr/bin/xz -3 -T0
 {% elif wildfly_mode == 'standalone' %}
 10 2 * * * {{ wildfly_user }} find {{ wildfly_base }}/standalone/log/ ! \( -name '*.xz' -o -name '*.gz' \) -mtime +2 -type f -exec xz -T6 -9ev {} \;
 {% endif %}
