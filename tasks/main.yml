@@ -26,7 +26,8 @@
 
 - include_tasks: ulimits.yml
 - include_tasks: users.yml
-
+  tags:
+   - wildfly_dc_management_user
 - include_tasks: ssl.yml
   when: wildfly_enable_ssl
 

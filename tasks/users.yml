@@ -39,6 +39,8 @@
     - wildfly_mode == 'domain'
     - wildfly_role in [ 'domain-master', 'domain-master-slave' ]
   no_log: false
+  tags:
+   - wildfly_dc_management_user
 
 - name: create domain controller cluster member users
   become: true
