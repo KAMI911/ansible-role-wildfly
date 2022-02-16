@@ -99,3 +99,17 @@
     - modules
     - README.txt
     - welcome-content
+
+- name: 'create additional directories when directory grouping is enabled'
+  file:
+    path: '{{ item }}'
+    owner: '{{ wildfly_user }}'
+    group: '{{ wildfly_group }}'
+    mode: '{{ wildfly_dir_mode }}'
+    state: directory
+  with_items:
+    - '{{ wildfly_directory_grouping_data | default (omit)}}'
+    - '{{ wildfly_directory_grouping_log | default (omit)}}'
+    - '{{ wildfly_directory_grouping_tmp | default (omit)}}'
+  when:
+    - wildfly_directory_grouping_by_type is true
