@@ -2,6 +2,8 @@
 Description=WildFly {{ wildfly_mode }} {{ wildfly_system_name }} application server
 After=syslog.target network.target
 Before=httpd.service
+StartLimitIntervalSec=900
+StartLimitBurst=5
 
 [Service]
 Type=simple
@@ -10,7 +12,7 @@ Environment=WILDFLY_HOME={{ wildfly_base }}
 {% if wildfly_system_integration %}
 Environment=JBOSS_CONF={{ wildfly_conf_dir }}/{{ wildfly_instance_name }}.conf
 {% else %}
-Environment=JBOSS_CONF={{ wildfly_base }}/domain/configuration/{{ wildfly_instance_name }}.conf
+Environment=JBOSS_CONF={{ wildfly_base }}/{{ wildfly_mode }}/configuration/{{ wildfly_instance_name }}.conf
 {% endif %}
 
 User={{ wildfly_user }}
@@ -20,7 +22,11 @@ PIDFile={% if wildfly_system_integration %}/var/run/wildfly/{{ wildfly_instance_
 
 LimitNOFILE={{ wildfly_limits_conf.1.value }}
 OOMScoreAdjust=-1000
-ExecStart=/bin/sh -c 'exec {{ wildfly_base }}/bin/launch.sh domain node >> {{ wildfly_console_log }} 2>&1'
+ExecStart=/bin/sh -c 'exec {{ wildfly_base }}/bin/launch.sh {% if wildfly_mode == 'domain' %}domain node{% else %}standalone{% endif %} >> {{ wildfly_console_log }} 2>&1'
+TimeoutStopSec={{ wildfly_shutdown_wait }}
+
+Restart=on-failure
+RestartSec=3s
 
 [Install]
 WantedBy=multi-user.target

@@ -2,6 +2,8 @@
 Description=WildFly Domain Controller {{ wildfly_system_name }} application server
 After=syslog.target network.target
 Before=httpd.service
+StartLimitIntervalSec=900
+StartLimitBurst=5
 
 [Service]
 Type=simple
@@ -21,6 +23,10 @@ PIDFile={% if wildfly_system_integration %}/var/run/wildfly/{{ wildfly_dc_instan
 LimitNOFILE=2048
 OOMScoreAdjust=-1000
 ExecStart=/bin/sh -c 'exec {{ wildfly_base }}/bin/launch.sh domain dc >> {{ wildfly_console_dc_log }} 2>&1'
+TimeoutStopSec={{ wildfly_shutdown_wait }}
+
+Restart=on-failure
+RestartSec=3s
 
 [Install]
 WantedBy=multi-user.target
