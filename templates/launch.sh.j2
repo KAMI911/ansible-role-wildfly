@@ -21,12 +21,13 @@ if [[ "$1" == "domain" ]]; then
       . '{{ wildfly_base }}/domain/configuration/{{ wildfly_instance_name }}.conf'
 {% endif %}
       ${WILDFLY_HOME}/bin/domain.sh -c ${JBOSS_DOMAIN_CONFIG} --host-config=${JBOSS_HOST_CONFIG} -b 0.0.0.0 ${JBOSS_OPTS} -DCurrentDate=$(date +%Y-%m-%d_%H%M) {% if wildfly_dc_backup_mode is defined and wildfly_dc_backup_mode == true %} --backup{% endif %}{% if wildfly_dc_cached_mode is defined and wildfly_dc_cached_mode == true %} --cached-dc{% endif %}
+
     ;;
       *)
-      echo "Wrong doamin paramaters"
+      echo "Wrong domain paramaters"
       exit -2
     ;;
     esac
 else
-    $WILDFLY_HOME/bin/standalone.sh -c $2 -b $3 -DCurrentDate=$(date +%Y-%m-%d_%H%M)
+    $WILDFLY_HOME/bin/standalone.sh -c ${JBOSS_CONFIG} -b 0.0.0.0 -DCurrentDate=$(date +%Y-%m-%d_%H%M) ${JBOSS_OPTS} 
 fi
