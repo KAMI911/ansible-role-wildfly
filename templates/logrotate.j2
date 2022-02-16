@@ -1,12 +1,19 @@
 # {{ ansible_managed }}
+
 {% if wildfly_mode == 'domain' %}
-{{ wildfly_base }}/log/*.log
+{% if wildfly_directory_grouping_log is defined and wildfly_directory_grouping_log %}
+{{ wildfly_directory_grouping_log }}/audit.log
+{% else %}
+{{ wildfly_console_log_dir }}/*.log
 {% endif %}
 {% if wildfly_role == 'domain-slave' or wildfly_role == 'domain-master-slave' %}
+{{ wildfly_console_log }}
 {{ wildfly_base }}/domain/log/*.log
 {% endif %}
 {% if wildfly_role == 'domain-master' or wildfly_role == 'domain-master-slave' %}
+{{ wildfly_console_dc_log }}
 {{ wildfly_base }}/domain-controller/log/*.log
+{% endif %}
 {% endif %}
 {
   su {{ wildfly_user }} {{ wildfly_group }}
