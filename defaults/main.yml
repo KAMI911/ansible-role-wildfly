@@ -59,7 +59,15 @@ wildfly_home: '{{ wildfly_system_home }}/wildfly'
 wildfly_base: '{{ wildfly_system_home }}/{{ wildfly_system_name }}'
 wildfly_data: ''
 
-wildfly_console_log_dir: '{{ wildfly_system_home }}/log'
+wildfly_directory_grouping_by_type: false
+# Configure directory_grouping parameters when wildfly_directory_grouping_by_type is true
+# wildfly_directory_grouping_data: '{{ wildfly_install_dir }}/data'
+# wildfly_directory_grouping_log: '{{ wildfly_install_dir }}/log'
+# wildfly_directory_grouping_tmp: '{{ wildfly_install_dir }}/tmp'
+
+wildfly_default_console_log_dir: '{{ wildfly_system_home }}/log'
+
+wildfly_console_log_dir: '{{ wildfly_directory_grouping_log | default(wildfly_default_console_log_dir) }}'
 wildfly_console_log_file: 'console.log'
 wildfly_console_log: '{{ wildfly_console_log_dir }}/{{ wildfly_console_log_file }}'
 wildfly_console_dc_log_file: 'console-dc.log'
@@ -167,12 +175,6 @@ wildfly_limits_conf:
    type: hard
    item: nproc
    value: 8192
-
-wildfly_directory_grouping_by_type: false
-# Configure directory_grouping parameters when wildfly_directory_grouping_by_type is true
-# wildfly_directory_grouping_data: '{{ wildfly_install_dir }}/data'
-# wildfly_directory_grouping_log: '{{ wildfly_install_dir }}/log'
-# wildfly_directory_grouping_tmp: '{{ wildfly_install_dir }}/tmp'
 
 wildfly_log_rotate_minsize: 20K
 wildfly_log_compress_command: '/usr/bin/xz'
