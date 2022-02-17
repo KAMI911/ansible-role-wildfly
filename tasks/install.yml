@@ -113,3 +113,14 @@
     - '{{ wildfly_directory_grouping_tmp | default (omit)}}'
   when:
     - wildfly_directory_grouping_by_type is true
+
+- name: 'create gc and heapdump directories'
+  file:
+    path: '{{ item }}'
+    owner: '{{ wildfly_user }}'
+    group: '{{ wildfly_group }}'
+    mode: '{{ wildfly_dir_mode }}'
+    state: directory
+  with_items:
+    - '{{ wildfly_gc_dir | default (omit)}}'
+    - '{{ wildfly_heapdump_dir | default (omit)}}'
