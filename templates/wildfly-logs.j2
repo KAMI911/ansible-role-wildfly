@@ -2,7 +2,7 @@
 MAILTO=root
 
 {% if wildfly_role == 'domain-slave' or wildfly_role == 'domain-master-slave' %}
-{% if wildfly_directory_grouping_log is defined and wildfly_directory_grouping_log %}
+{% wildfly_directory_grouping_by_type is true and if wildfly_directory_grouping_log is defined and wildfly_directory_grouping_log %}
 10 2 * * * {{ wildfly_user }} nice -n 10 find {{ wildfly_directory_grouping_log }}/servers/ -name \( -name \*????-??-??.log -or -name \*log.????-??-?? \)  ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r {{ wildfly_log_compress_command }} {{ wildfly_log_compress_options }}
 50 2 * * * {{ wildfly_user }} nice -n 10 find {{ wildfly_gc_dir }}/ \( -name gc[_-]\*.log -or -name gc[_-]\*.log.\? -or -name gc[_-]\*.log.\?? -or -name gc[_-]\*.log.\??? \) ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r {{ wildfly_log_compress_command }} {{ wildfly_log_compress_options }}
 {% else %}
