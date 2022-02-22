@@ -18,17 +18,6 @@
   shell: 'echo $(systemctl is-active firewalld)'
   register: service_firewalld
 
-- name: install firewalld package
-  package:
-    name: firewalld
-    state: present
-
-- name: ensure firewalld is running and enabled on boot
-  service:
-    name: firewalld
-    state: started
-    enabled: true
-
 - block:
     - name: open wildfly management http tcp port
       firewalld:
@@ -57,7 +46,7 @@
         permanent: true
         immediate: true
         state: enabled
-  when: wildfly_enable_firewalld and ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat') and wildfly_manage_firewalld
+  when: service_firewalld and ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat') and wildfly_manage_firewalld
 
 - block:
   - name: open wildfly management http tcp port on domain controller master
@@ -80,7 +69,7 @@
       permanent: true
       immediate: true
       state: enabled
-  when: wildfly_enable_firewalld and ((wildfly_mode == 'domain' and
+  when: service_firewalld and ((wildfly_mode == 'domain' and
       (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-master') and
       ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or
       ansible_os_family != 'RedHat') and wildfly_manage_firewalld
@@ -93,7 +82,7 @@
     state: enabled
   with_items:
    - '{{ wildfly_cluser_members }}'
-  when: wildfly_enable_firewalld and ((wildfly_mode == 'domain' and
+  when: service_firewalld and ((wildfly_mode == 'domain' and
       (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-slave') and
       ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or
       ansible_os_family != 'RedHat') and wildfly_manage_firewalld
