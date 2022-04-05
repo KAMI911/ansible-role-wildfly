@@ -26,8 +26,8 @@
   notifempty
   dateext
   dateformat -%Y%m%d
-  minsize {{ wildfly_log_rotate_minsize | default('20k') }}
-  compresscmd {{ wildfly_log_compress_command }}
-  compressoptions "{{ wildfly_log_compress_options }}"
-  compressext {{ wildfly_log_compress_extension }}
+  minsize {{ wildfly_log_rotate_minsize | default('20K') }}
+  compresscmd {{ wildfly_log_compress_command | default('/usr/bin/xz') }}
+  compressoptions "{{ wildfly_log_compress_options | default('-3 -T4') }}"
+  compressext {{ wildfly_log_compress_extension | default('.xz') }}
 }

@@ -180,5 +180,5 @@ wildfly_limits_conf:
 
 wildfly_log_rotate_minsize: 20K
 wildfly_log_compress_command: '/usr/bin/xz'
-wildfly_log_compress_options: '-9e'
+wildfly_log_compress_options: '-3 -T4'
 wildfly_log_compress_extension: '.xz'
