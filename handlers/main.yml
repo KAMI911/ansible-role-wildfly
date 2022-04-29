@@ -1,6 +1,15 @@
 ---
 # handlers file for wildfly
 
+- name: systemd reload
+  become: true
+  systemd:
+    daemon_reload: true
+  listen: 'systemd daemon reload'
+  when:
+    - wildfly_manage_service
+    - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 7) or ansible_os_family != 'RedHat')
+
 - name: restart wildfly
   service:
     name: '{{ wildfly_instance_name }}'
