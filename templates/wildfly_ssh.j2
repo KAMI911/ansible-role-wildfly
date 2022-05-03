@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
 {% for ssh_key in wildfly_user_ssh_key %}
-# {% item.name %}
-{% if item.options is defined %}{% item.options %} {% endif %}{% if item.key is defined %}{% item.key %}{% endif %}
+# {{ item.name }}
+{% if item.options is defined %}{{ item.options }} {% endif %}{% if item.key is defined %}{{ item.key }}{% endif %}
 {% endfor %}
