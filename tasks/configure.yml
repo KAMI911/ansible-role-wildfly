@@ -4,7 +4,7 @@
 - block:
     - name: 'add .ssh directory for wildfly user'
       file:
-        path: '{{ __app_dir }}/home/.ssh/'
+        path: '{{ wildfly_system_home }}/home/.ssh/'
         owner: '{{ wildfly_user }}'
         group: '{{ wildfly_group }}'
         mode: '600'
@@ -14,7 +14,7 @@
     - name: add ssh access for wildfly user
       template:
         src: wildfly_ssh.j2
-        dest: '{{ __app_dir }}/home/.ssh/authorized_keys'
+        dest: '{{ wildfly_system_home }}/home/.ssh/authorized_keys'
         owner: '{{ wildfly_user }}'
         group: '{{ wildfly_group }}'
         mode: '0400'
