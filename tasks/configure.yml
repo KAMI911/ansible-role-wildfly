@@ -7,7 +7,7 @@
         path: '{{ wildfly_system_home }}/home/.ssh/'
         owner: '{{ wildfly_user }}'
         group: '{{ wildfly_group }}'
-        mode: '600'
+        mode: '700'
         recurse: no
         state: directory
 

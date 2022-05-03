@@ -13,6 +13,15 @@
         gid:  '{{ __app_system_group_id | default(omit) }}'
         state: present
 
+    - name: 'add home directory for wildfly user'
+      file:
+        path: '{{ wildfly_system_home }}/home/'
+        owner: '{{ wildfly_user }}'
+        group: '{{ wildfly_group }}'
+        mode: '700'
+        recurse: no
+        state: directory
+
     - name: create application user
       user:
         name: '{{ __app_system_user }}'
