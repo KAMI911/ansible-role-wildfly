@@ -42,6 +42,10 @@ wildfly_user_id: 363
 wildfly_user_shell: ''
 wildfly_group: wildfly
 wildfly_group_id: 363
+wildfly_user_ssh_key: []
+# - name: username of key
+#   key:
+#   options:
 
 wildfly_base_download_url: https://download.jboss.org/wildfly
 wildfly_download_validate_certs: 'yes'

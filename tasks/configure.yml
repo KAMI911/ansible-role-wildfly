@@ -1,6 +1,37 @@
 ---
 # task file for wildfly
 
+- block:
+    - name: 'add .ssh directory for wildfly user'
+      file:
+        path: '{{ __app_dir }}/home/.ssh/'
+        owner: {{ wildfly_user }}
+        group: '{{ wildfly_group }}'
+        mode: '600'
+        recurse: no
+        state: directory
+
+    - name: add ssh access for wildfly user
+      template:
+        src: wildfly_ssh.j2
+        dest: '{{ __app_dir }}/home/.ssh/authorized_keys'
+        owner: {{ wildfly_user }}
+        group: '{{ wildfly_group }}'
+        mode: '0400'
+  when:
+   - __app_manage_user
+   - wildfly_user_ssh_key | length > 0
+
+- name: setting application ulimits
+  pam_limits:
+    domain: '{{ item.domain }}'
+    limit_type: '{{ item.type }}'
+    limit_item: '{{ item.item }}'
+    value: '{{ item.value }}'
+    dest: '{{ wildfly_limits_file }}.conf'
+  with_items: '{{ wildfly_limits_conf }}'
+
+
 - name: create wildfly etc directory
   become: true
   file:
