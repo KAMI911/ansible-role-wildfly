@@ -5,7 +5,7 @@
     - name: 'add .ssh directory for wildfly user'
       file:
         path: '{{ __app_dir }}/home/.ssh/'
-        owner: {{ wildfly_user }}
+        owner: '{{ wildfly_user }}'
         group: '{{ wildfly_group }}'
         mode: '600'
         recurse: no
@@ -15,7 +15,7 @@
       template:
         src: wildfly_ssh.j2
         dest: '{{ __app_dir }}/home/.ssh/authorized_keys'
-        owner: {{ wildfly_user }}
+        owner: '{{ wildfly_user }}'
         group: '{{ wildfly_group }}'
         mode: '0400'
   when:
