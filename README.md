@@ -68,14 +68,40 @@ Export this language as LANG and LC_ALL shell variables for the domain nodes.
 
 Specify Wildfly config file version. 14 = '8.0'; 15-18 = '10.0'; 20 = '13.0'; 24 = 17.0.
 
+
+### User and group managemenet related options
+
+    wildfly_manage_user: true
+
+Ansible role will manage user, create user and group with a specified uid and gid, shell access and SSH access.
+
     wildfly_user: wildfly
+
+System user who will run Wildfly application server.
+
+    wildfly_user_id: 363
+
+User id of Wildfly user above.
 
     wildfly_user_shell: ''
 
 Specifly the Wildfly Linux user's default Shell. Can be '' or a Shell like '/bin/bash'. The role creates the required Wildfly user and group only when wildfly_manage_user is set to true.
 
     wildfly_group: wildfly
-    wildfly_mode: standalone
+
+System user's group.
+
+    wildfly_group_id: 363
+
+Group id of Wildfly user above.
+
+    wildfly_user_ssh_key: []
+    # - name: username of key
+    #   key:
+    #   options:
+
+Add multiple users' SSH key when wildfly_user_ssh_key is not empty ([]). The you can specify a name (display only in the file), a SSH key and SSH authorized_keys options for each SSH user.
+
     wildfly_base_download_url: http://download.jboss.org/wildfly
     wildfly_name: wildfly-{{ wildfly_version }}
     wildfly_download_file: "{{ wildfly_name }}.tar.gz"
