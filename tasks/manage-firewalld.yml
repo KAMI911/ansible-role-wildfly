@@ -46,7 +46,10 @@
         permanent: true
         immediate: true
         state: enabled
-  when: service_firewalld and ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat') and wildfly_manage_firewalld
+  when:
+   - service_firewalld.stdout == 'active'
+   - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat')
+   - wildfly_manage_firewalld
 
 - block:
   - name: open wildfly management http tcp port on domain controller master
@@ -69,10 +72,10 @@
       permanent: true
       immediate: true
       state: enabled
-  when: service_firewalld and ((wildfly_mode == 'domain' and
-      (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-master') and
-      ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or
-      ansible_os_family != 'RedHat') and wildfly_manage_firewalld
+  when:
+   - service_firewalld.stdout == 'active'
+   - ((wildfly_mode == 'domain' and (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-master') and ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat')
+   - wildfly_manage_firewalld
 
 - name: add modcluster connection members
   firewalld:
@@ -82,7 +85,7 @@
     state: enabled
   with_items:
    - '{{ wildfly_cluser_members }}'
-  when: service_firewalld and ((wildfly_mode == 'domain' and
-      (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-slave') and
-      ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or
-      ansible_os_family != 'RedHat') and wildfly_manage_firewalld
+  when:
+   - service_firewalld.stdout == 'active'
+   - ((wildfly_mode == 'domain' and (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-slave') and ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat')
+   - wildfly_manage_firewalld
