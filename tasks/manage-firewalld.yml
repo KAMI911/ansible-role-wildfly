@@ -78,14 +78,43 @@
    - wildfly_manage_firewalld
 
 - name: add modcluster connection members
+  become: true
   firewalld:
     permanent: yes
     immediate: yes
-    rich_rule: 'rule family=ipv4 port port=23364 protocol=udp source address={{ item }}/32  destination address={{ wildfly_modcluster_address }} log prefix="Undertow Modcluster ACCEPT " level="notice" limit value=3/m accept'
+    rich_rule: 'rule family="ipv4" port port="23364" protocol="udp" source address="{{ item }}/32"  destination address="{{ wildfly_modcluster_address }}" log prefix="Undertow Modcluster ACCEPT " level="notice" limit value=3/m accept'
     state: enabled
   with_items:
-   - '{{ wildfly_cluser_members }}'
+   - '{{ wildfly_cluster_members }}'
+  notify:
+   - 'firewalld daemon reload'
   when:
    - service_firewalld.stdout == 'active'
    - ((wildfly_mode == 'domain' and (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-slave') and ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat')
    - wildfly_manage_firewalld
+   - not wildfly_manage_firewalld_use_ipset
+
+- block:
+  become: true
+  - name: add FirewallD IPsets
+    template:
+      src: firewalld-ipset.xml.j2
+      dest: /etc/firewalld/ipsets/{{ item.filename }}
+      owner: root
+      group: root
+      mode: 0644
+    with_items: '{{ wildfly_cluster_ipsets }}'
+
+  - name: add modcluster connection members using ipset
+    firewalld:
+      permanent: yes
+      immediate: yes
+      rich_rule: 'rule family="ipv4" port port="23364" protocol="udp"source ipset="{{ wildfly_manage_firewalld_ipset_name }}" destination address="{{ wildfly_modcluster_address }}" log prefix="Undertow Modcluster ACCEPT " level="info" limit value="3/m" accept'
+      state: enabled
+  notify:
+   - 'firewalld daemon reload'
+  when:
+   - service_firewalld.stdout == 'active'
+   - ((wildfly_mode == 'domain' and (wildfly_role == 'domain-master-slave' or wildfly_role == 'domain-slave') and ansible_os_family == 'RedHat' and ansible_distribution_major_version|int  > 6) or ansible_os_family != 'RedHat')
+   - wildfly_manage_firewalld
+   - wildfly_manage_firewalld_use_ipset

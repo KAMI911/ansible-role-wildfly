@@ -11,6 +11,7 @@
     - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 7) or ansible_os_family != 'RedHat')
 
 - name: restart wildfly
+  become: true
   service:
     name: '{{ wildfly_instance_name }}'
     state: '{{ wildfly_service_status }}'
@@ -20,6 +21,7 @@
     - wildfly_manage_service
 
 - name: restart wildfly domain controller
+  become: true
   service:
     name: '{{ wildfly_dc_instance_name }}'
     state: '{{ wildfly_service_status }}'
@@ -37,3 +39,13 @@
     recurse: no
     state: directory
   when: wildfly_manage_data
+
+- name: firewalld reload
+  become: true
+  command: firewall-cmd --reload
+  listen: 'firewalld daemon reload'
+  when:
+    - wildfly_manage_firewalld
+    - wildfly_enable_firewalld
+    - service_firewalld.stdout == 'active'
+    - ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 7) or ansible_os_family != 'RedHat')

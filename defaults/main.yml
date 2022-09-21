@@ -7,6 +7,8 @@ wildfly_manage_python_pkg: true
 wildfly_manage_firewalld: true
 wildfly_enable_firewalld: true
 wildfly_manage_firewalld_use_zone: true
+wildfly_manage_firewalld_use_ipset: false
+wildfly_manage_firewalld_ipset_name: "wildfly_cluster_members"
 
 wildfly_manage_data: true
 wildfly_manage_service: true
@@ -109,11 +111,18 @@ wildfly_master_port: 19999
 wildfly_master_http_port: 19990
 wildfly_master_https_port: 19993
 
-wildfly_cluser_members:
+wildfly_cluster_members:
  - '{{ wildfly_master_address }}'
 
 wildfly_modcluster_address: '224.0.{{ wildfly_master_address.split(".")[2:4] | join(".") }}'
 wildfly_multicast_address: '230.0.{{ wildfly_master_address.split(".")[2:4] | join(".") }}'
+
+wildfly_cluster_ipsets:
+- filename: wildfly_cluster_ips.xml
+  description: Wildfly cluster members IPs IPset
+  type: ip
+  entries:
+   - '{{ wildfly_master_address }}'
 
 wildfly_management_users:
  - name: admin

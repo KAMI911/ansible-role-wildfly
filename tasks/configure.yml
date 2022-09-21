@@ -510,6 +510,7 @@
         - systemd daemon reload
         - restart wildfly services
         - change data mode
+        - systemd daemon reload
       when: wildfly_system_integration
 
     - name: copy wildfly systemd unit file to application folder
@@ -523,6 +524,7 @@
         - systemd daemon reload
         - restart wildfly services
         - change data mode
+        - systemd daemon reload
       when: not wildfly_system_integration
 
     - name: 'create symlink to {{ wildfly_base }}/{{ wildfly_mode }}/configuration/{{ wildfly_instance_name }}.service'
@@ -549,6 +551,7 @@
     notify:
       - restart wildfly domain services
       - change data mode
+      - systemd daemon reload
     when: wildfly_system_integration
 
   - name: copy wildfly domain controller systemd unit file to application folder
@@ -561,6 +564,7 @@
     notify:
       - restart wildfly domain services
       - change data mode
+      - systemd daemon reload
     when: not wildfly_system_integration
 
   - name: 'create symlink to {{ wildfly_base }}/domain-controller/configuration/{{ wildfly_dc_instance_name }}.service'
@@ -572,11 +576,6 @@
       force: true
     when: not wildfly_system_integration
 
-  - name: systemd reload
-    become: true
-    systemd:
-      daemon_reload: true
-    when: ((ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 7) or ansible_os_family != 'RedHat')
   when:
     - wildfly_mode == 'domain'
     - wildfly_role in [ 'domain-master', 'domain-master-slave' ]

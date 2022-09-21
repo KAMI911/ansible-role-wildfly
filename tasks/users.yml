@@ -50,7 +50,7 @@
     touch {{ wildfly_base }}/.host-dc-users.{{ item }}.provisioned
   args:
     creates: '{{ wildfly_base }}/.host-dc-users.{{ item }}.provisioned'
-  with_items: '{{ wildfly_cluser_members }}'
+  with_items: '{{ wildfly_cluster_members }}'
   when:
     - wildfly_mode == 'domain'
     - wildfly_role in [ 'domain-master', 'domain-master-slave' ]
