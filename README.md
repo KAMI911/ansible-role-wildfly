@@ -1,6 +1,6 @@
 # Wildfly
 
-[![Build Status](https://travis-ci.org/KAMI911/ansible-role-wildfly.svg?branch=master)](https://travis-ci.org/KAMI911/ansible-role-wildfly)
+[![Build Status](https://github.com/KAMI911/ansible-role-wildfly/actions/workflows/test_ansible_module.yml/badge.svg)](https://github.com/KAMI911/ansible-role-wildfly/actions/workflows/test_ansible_module.yml)
 
 # Ansible Role: Installs Wildfly Java Application server (optionally with Hugepages)
 
