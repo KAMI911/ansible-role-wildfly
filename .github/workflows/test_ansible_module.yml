@@ -6,24 +6,39 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-ansible-molecule:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - non-experimental
-        base:
-          - bullseye
-        engine-version:
-          - 19.03-dind
+  lint:
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - name: Install Ansible module molecule test
-        run: |
-          sudo apt install -y python3-dev python3-pip
-          docker info
-          python3 --version
-          pip3 install ansible 'molecule[docker]'
-          ansible --version
-          molecule test
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: buluma/molecule-action@v5.0.1
+        with:
+          command: lint
+  test:
+    needs:
+      - lint
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        image:
+          - alpine
+          - amazonlinux
+          - debian
+          - centos
+          - fedora
+          - opensuse
+          - ubuntu
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: "${{ github.repository }}"
+      - name: molecule
+        uses: buluma/molecule-action@v5.0.1
+        with:
+          image: "${{ matrix.image }}"
+          options: parallel
+          scenario: my_specific_scenario
