@@ -6,6 +6,8 @@
 
 - name: set variables for download
   include_vars: download_wildfly.yml
+  tags:
+  - always
 
 - name: download Wildfly installer
   include_tasks: download.yml
