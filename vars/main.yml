@@ -19,3 +19,6 @@ wildfly_init_dir: /etc/init.d
 wildfly_systemd_dir: /usr/lib/systemd/system
 
 python_version: ''
+
+wildfly_host_master_filename: '{%if wildfly_major_v|int > 26 %}host-primary.xml{% else %}host-master.xml{% endif %}'
+wildfly_host_slave_filename: '{%if wildfly_major_v|int > 26 %}host-secondary.xml{% else %}host-slave.xml{% endif %}'

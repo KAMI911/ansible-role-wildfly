@@ -122,15 +122,15 @@
   with_items:
     - default-server-logging.properties
     - domain.xml
-    - host-master.xml
-    - host-slave.xml
+    - '{{ wildfly_host_master_filename }}'
+    - '{{ wildfly_host_slave_filename }}'
     - host.xml
     - logging.properties
   when: wildfly_mode == 'domain'
 
 - name: 'Setting node password for domain members to connect domain-controller for host slaves'
   lineinfile:
-    dest: '{{ wildfly_base }}/domain/configuration/host-slave.xml'
+    dest: '{{ wildfly_base }}/domain/configuration/{{ wildfly_host_slave_filename }}'
     regexp: '(.*)<secret value="(\S+)"(.*)$'
     line: '\1<secret value="{{ wildfly_node_password | b64encode }}"\3'
     backrefs: yes
@@ -144,7 +144,7 @@
 # - block:
 #     - name: 'Setting node password for domain members to connect domain-controller for host slaves (1)'
 #       xml:
-#         path: '{{ wildfly_base }}/domain/configuration/host-slave.xml'
+#         path: '{{ wildfly_base }}/domain/configuration/{{ wildfly_host_slave_filename }}'
 #         xpath: '/h:host/management/security-realms/security-realm'
 #         namespaces:
 #           h: 'urn:jboss:domain:{{ wildfly_file_version }}'
@@ -152,14 +152,14 @@
 #         value: 'SlaveRealm'
 #     - name: 'Setting node password for domain members to connect domain-controller for host slaves (2)'
 #       xml:
-#         path: '{{ wildfly_base }}/domain/configuration/host-slave.xml'
+#         path: '{{ wildfly_base }}/domain/configuration/{{ wildfly_host_slave_filename }}'
 #         xpath: '/h:host/management/security-realms/security-realm/server-identities'
 #         namespaces:
 #           h: 'urn:jboss:domain:{{ wildfly_file_version }}'
 #         state: present
 #     - name: 'Setting node password for domain members to connect domain-controller for host slaves (3)'
 #       xml:
-#         path: '{{ wildfly_base }}/domain/configuration/host-slave.xml'
+#         path: '{{ wildfly_base }}/domain/configuration/{{ wildfly_host_slave_filename }}'
 #         xpath: '/h:host/management/security-realms/security-realm/server-identities/secret'
 #         namespaces:
 #           h: 'urn:jboss:domain:{{ wildfly_file_version }}'
@@ -224,7 +224,7 @@
   with_items:
     - default-server-logging.properties
     - domain.xml
-    - host-master.xml
+    - '{{ wildfly_host_master_filename }}'
     - logging.properties
   when:
     - wildfly_mode == 'domain'
@@ -233,7 +233,7 @@
 - block:
     - name: 'Setting domain-controller to use native port (1)'
       xml:
-        path: '{{ wildfly_base }}/domain-controller/configuration/host-master.xml'
+        path: '{{ wildfly_base }}/domain-controller/configuration/{{ wildfly_host_master_filename }}'
         xpath: '/h:host/h:management/h:management-interfaces/h:native-interface'
         namespaces:
           h: 'urn:jboss:domain:{{ wildfly_file_version }}'
@@ -243,7 +243,7 @@
       notify: restart wildfly domain services
     - name: 'Setting domain-controller to use native port (2)'
       xml:
-        path: '{{ wildfly_base }}/domain-controller/configuration/host-master.xml'
+        path: '{{ wildfly_base }}/domain-controller/configuration/{{ wildfly_host_master_filename }}'
         xpath: '/h:host/h:management/h:management-interfaces/h:native-interface'
         input_type: 'xml'
         namespaces:
@@ -260,7 +260,7 @@
 
 - name: 'Setting domain member to use native port (1)'
   xml:
-    path: '{{ wildfly_base }}/domain/configuration/host-slave.xml'
+    path: '{{ wildfly_base }}/domain/configuration/{{ wildfly_host_slave_filename }}'
     xpath: '/h:host/h:domain-controller'
     input_type: 'xml'
     namespaces:
