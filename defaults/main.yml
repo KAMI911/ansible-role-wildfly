@@ -37,7 +37,7 @@ wildfly_dc_backup_mode: false
 wildfly_dc_cached_mode: true
 
 wildfly_version: '24.0.1.Final'  # supported versions: 9.0.2.Final; 10.0.0.Final; 10.1.0.Final; 11.0.0.Final
-wildfly_file_version: '17.0'  # 14 = 8.0; 15-18 = 10.0; 20 = 13.0; 24 = 17.0
+wildfly_file_version: '17.0'  # 14 => 8.0; 15-18 => 10.0; 20 => 13.0; 24 => 17.0; 26 = 19.0; 27 = 20.0; 29 = 20.0; 30 = 20.0
 wildfly_manage_user: true
 wildfly_user: wildfly
 wildfly_user_id: 363
