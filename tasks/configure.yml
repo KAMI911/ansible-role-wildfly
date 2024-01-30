@@ -417,7 +417,61 @@
     owner: "root"
     group: "root"
     mode: "0644"
-  when: cron_d_dir.stat.exists
+  when:
+    - cron_d_dir.stat.exists
+    - not wildfly_log_compress_local_user
+
+- block:
+  - name: "prepare daily log compress domain mode Wildfly local user's crontab task with direcrory grouping"
+    ansible.builtin.cron:
+      user: '{{ wildfly_user }}'
+      name: "check dirs"
+      minute: "10"
+      hour: "2"
+      job: 'nice -n 10 find {{ wildfly_directory_grouping_log }}/servers/ \( -name \*????-??-??.log -or -name \*log.????-??-?? \)  ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r {{ wildfly_log_compress_command }} {{ wildfly_log_compress_options }}'
+  - name: "prepare daily GC log compress domain mode Wildfly local user's crontab task with direcrory grouping"
+    ansible.builtin.cron:
+      user: '{{ wildfly_user }}'
+      name: "check dirs"
+      minute: "10"
+      hour: "2"
+      job: 'nice -n 10 find {{ wildfly_gc_dir }}/ \( -name gc[_-]\*.log -or -name gc[_-]\*.log.\? -or -name gc[_-]\*.log.\?? -or -name gc[_-]\*.log.\??? \) ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r {{ wildfly_log_compress_command }} -S .`date +\%Y\%m\%d_\%H\%M`.xz {{ wildfly_log_compress_options }}'
+  when:
+    - wildfly_log_compress_local_user
+    - wildfly_role == 'domain-slave' or wildfly_role == 'domain-master-slave'
+    - wildfly_directory_grouping_by_type is true and wildfly_directory_grouping_log is defined and wildfly_directory_grouping_log
+
+- block:
+  - name: "prepare daily log compress domain mode Wildfly local user's crontab task"
+    ansible.builtin.cron:
+      user: '{{ wildfly_user }}'
+      name: "check dirs"
+      minute: "10"
+      hour: "2"
+      job: 'nice -n 10 find {{ wildfly_directory_grouping_log }}/servers/ \( -name \*????-??-??.log -or -name \*log.????-??-?? \)  ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r {{ wildfly_log_compress_command }} {{ wildfly_log_compress_options }}'
+  - name: "prepare daily GC log compress domain mode Wildfly local user's crontab task"
+    ansible.builtin.cron:
+      user: '{{ wildfly_user }}'
+      name: "check dirs"
+      minute: "10"
+      hour: "2"
+      job: 'nice -n 10 find {{ wildfly_gc_dir }}/ \( -name gc[_-]\*.log -or -name gc[_-]\*.log.\? -or -name gc[_-]\*.log.\?? -or -name gc[_-]\*.log.\??? \) ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r {{ wildfly_log_compress_command }} -S .`date +\%Y\%m\%d_\%H\%M`.xz {{ wildfly_log_compress_options }}'
+  when:
+    - wildfly_log_compress_local_user
+    - wildfly_role == 'domain-slave' or wildfly_role == 'domain-master-slave'
+    - not (wildfly_directory_grouping_by_type is true and wildfly_directory_grouping_log is defined and wildfly_directory_grouping_log)
+
+- block:
+  - name: "prepare daily log compress for standalonw Wildfly local user's crontab task"
+    ansible.builtin.cron:
+      user: '{{ wildfly_user }}'
+      name: "check dirs"
+      minute: "10"
+      hour: "2"
+      job: 'nice -n 10 find {{ wildfly_base }}/standalone/log/ \( -name \*????-??-??.log -or -name \*log.????-??-?? \)  ! \( -name \*.xz -or -name \*.gz -or -name \*.zip -or -name \*.tgz \) -mtime +1 -type f -print0 | xargs -0 -t -r {{ wildfly_log_compress_command }} {{ wildfly_log_compress_options }}'
+  when:
+    - wildfly_log_compress_local_user
+    - wildfly_role == 'standalone'
 
 - include: configure-properties.yml
 

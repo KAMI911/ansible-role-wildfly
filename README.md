@@ -340,14 +340,19 @@ both the size and timestamp of a log file are considered.
 Location is the compressor program. Default is xz so the dafault value is '/usr/bin/xz'.
 You can also use for example: '/usr/bin/gzip'.
 
-    wildfly_log_compress_options: '-9e'
+    wildfly_log_compress_options: '-3'
 
-Options for compression program. For xz the default is '-9e' that means maximum compression.
+Options for compression program. For xz the default is '-3' that means a fast compression.
 For gzip íou can use for example: '-9'.
 
     wildfly_log_compress_extension: '.xz'
 
 File extension for logrotate specification. xz is '.xz', and gzip is 'gz'.
+
+    wildfly_log_compress_local_user: false
+
+Set false to use cron.d for compressing Wildfly general logs and GC logs (default), or
+set true to use Wildfly user's crontab to do compression.
 
 ## Dependencies
 
