@@ -191,6 +191,10 @@ wildfly_limits_conf:
    item: nproc
    value: 8192
 
+wildfly_systemd_limits:
+ - key: DefaultLimitCORE
+   value: infinity
+
 wildfly_log_rotate_minsize: 20K
 wildfly_log_compress_command: '/usr/bin/xz'
 wildfly_log_compress_options: '-3 -T4'
