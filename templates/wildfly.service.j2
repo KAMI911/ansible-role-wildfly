@@ -25,6 +25,10 @@ OOMScoreAdjust=-1000
 ExecStart=/bin/sh -c 'exec {{ wildfly_base }}/bin/launch.sh {% if wildfly_mode == 'domain' %}domain node{% else %}standalone{% endif %} >> {{ wildfly_console_log }} 2>&1'
 TimeoutStopSec={{ wildfly_shutdown_wait }}
 
+{% for systemd_limit in wildfly_systemd_limits %}
+{{ systemd_limit.key }}={{ systemd_limit.value }}
+{% endfor %}
+
 Restart=on-failure
 RestartSec=3s
 
